@@ -2,3 +2,4 @@ title: Notes? Blog?
 description: Jotting down random things I come across and find interesting (mostly tech)
 theme: jekyll-theme-architect
 include: [ 'databases.md', 'linkPrediction.md', '/nlp/README.md', '/microservices/README.md' ]
+markdown: kramdown
