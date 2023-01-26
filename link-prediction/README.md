@@ -1,9 +1,3 @@
----
-title: Link Prediction
-layout: template
-filename: linkPrediction.md
---- 
-
 # Link Prediction
 
 ## Introduction

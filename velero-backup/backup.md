@@ -1,9 +1,3 @@
----
-title: Velero Backup
-layout: template
-filename: backup.md
---- 
-
 # Velero Backup on GCP
 
 ### Authorization and Login

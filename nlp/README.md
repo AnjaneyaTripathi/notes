@@ -1,9 +1,3 @@
----
-title: NLP
-layout: template
-filename: README.md
---- 
-
 # Natural Language Processing
 
 ## Latent Semantic Analysis (LSA)
