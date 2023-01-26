@@ -1,5 +1,6 @@
 ---
 title: Designing Data Intensive Applications
+template: README.md
 filename: databases.md
 --- 
 
