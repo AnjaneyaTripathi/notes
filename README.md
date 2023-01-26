@@ -10,6 +10,12 @@ Go to [Velero Backup](/velero-backup/backup.md)
 
 Go to [NLP](/nlp/README.md)
 
-Go to [Java](/java/)
+Go to [Java](/java/README.md)
 
 Go to [Microservices](/microservices/README.md)
+
+Go to [Architecture](/architecture/README.md)
+
+Go to [DL](/deep-learning/README.md)
+
+Go to [Docker](/docker/README.md)
