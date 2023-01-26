@@ -1,6 +1,5 @@
 ---
 title: Link Prediction
-layout: template
 filename: linkPrediction.md
 --- 
 
