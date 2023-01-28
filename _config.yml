@@ -1,4 +1,5 @@
 title: Notes? Blog? 
 description: Jotting down random things I come across and find interesting (mostly tech)
-theme: jekyll-theme-architect
+theme: jekyll-theme-minimal
 markdown: kramdown
+usemathjax: true
