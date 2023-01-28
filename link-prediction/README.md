@@ -25,11 +25,6 @@ The observation that one can find a short chain of acquaintances, often no more 
 
 Vast majority of nodes have very few connections, while a few important nodes have a huge number of connections.
 
-\\\[ x = {-b \\pm \\sqrt{b^2-4ac} \\over 2a} \\\]
-
-\\[ x = {-b \pm \sqrt{b^2-4ac} \over 2a} \\]
-
-
 ---
 
 # Paper Reviews
