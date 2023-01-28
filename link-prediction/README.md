@@ -61,5 +61,6 @@ Pairs of nodes $x, y$ are assigned a similarity score $S(x, y)$ and links are pr
 
 2. **Jaccard Coefficient:** This is similar to Common Neighbors, but it is normalised by dividing by the total neighbors they have. $S(x, y) = |\frac {\Gamma(x) \cap \Gamma(y)|} {\Gamma(x) \cup \Gamma(y)|}$ This sometimes underperforms compared to common neighbor method.
 
-3. **Adamic/Adar Index:** Used to cacluclate similarity score between 2 web pages. $S(x, y) = \sum_{z \in \Gamma(x) \cap \Gamma(y)} 1/\log(k_z)$ where $k_z$ is the degree of the node $z$. This is intuitive, a person with more friends will spend less time/resource with an individual friend than one who has lesser friends.
+3. **Adamic/Adar Index:** Used to cacluclate similarity score between 2 web pages. 
+```math S(x, y) = \sum_{z \in \Gamma(x) \cap \Gamma(y)} 1/\log(k_z)$ ``` where $k_z$ is the degree of the node $z$. This is intuitive, a person with more friends will spend less time/resource with an individual friend than one who has lesser friends.
 
