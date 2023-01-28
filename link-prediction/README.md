@@ -59,7 +59,7 @@ Pairs of nodes $x, y$ are assigned a similarity score $S(x, y)$ and links are pr
 
 1. **Common Neighbors:** This performs the best in real world scenarios and often outperforms more complex methods. $S(x, y) = |\Gamma(x) \cap \Gamma(y)|$ where $\Gamma(x)$ gives the number of neighbors of node $x$.
 
-2. **Jaccard Coefficient:** This is similar to Common Neighbors, but it is normalised by dividing by the total neighbors they have. $S(x, y) = |\frac {\Gamma(x) \cap \Gamma(y)|} {\Gamma(x) \cup \Gamma(y)|}$ This sometimes underperforms compared to common neighbor method.
+2. **Jaccard Coefficient:** This is similar to Common Neighbors, but it is normalised by dividing by the total neighbors they have. $$S(x, y) = |\frac {\Gamma(x) \cap \Gamma(y)|} {\Gamma(x) \cup \Gamma(y)|}$$ This sometimes underperforms compared to common neighbor method.
 
 3. **Adamic/Adar Index:** Used to cacluclate similarity score between 2 web pages. 
 ```math 
