@@ -1,6 +1,4 @@
-# Java
-
-## Garbage Collection
+# Garbage Collection
 
 ### Introduction
 
