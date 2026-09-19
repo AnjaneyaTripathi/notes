@@ -1,15 +1,15 @@
 ---
 layout: post
-title: "Cloud/Deployment — Docker, Azure/AWS, CI/CD (Final Topic on the Original List)"
+title: "Cloud/Deployment — Docker, Azure/AWS, CI/CD"
 date: 2026-08-28
 order: 1
 categories: [reading, ai]
 tags: [reading-notes, master-study-guide]
 ---
 
-## Cloud/Deployment — Docker, Azure/AWS, CI/CD (Final Topic on the Original List)
+## Cloud/Deployment — Docker, Azure/AWS, CI/CD
 
-CI/CD (Final Topic on the Original List) This is where everything from the earlier discussion becomes an actual running system a client can use. The bar here isn't deep infra expertise for a junior/associate role — it's demonstrating you understand why these tools exist and how they specifically apply to deploying GenAI/RAG/agentic systems, not just generic web apps.
+CI/CD This is where everything from the earlier discussion becomes an actual running system a client can use. The bar here isn't deep infra expertise for a junior/associate role — it's demonstrating you understand why these tools exist and how they specifically apply to deploying GenAI/RAG/agentic systems, not just generic web apps.
 
 ### Docker / Containerization — the fundamentals
 
@@ -90,13 +90,6 @@ into one system) If asked to sketch a production RAG/agentic system's deployment
   </div>
   <div class="interview-qa__item">
     <p class="interview-qa__question"><strong>Q.</strong> How would you handle secrets like API keys in a containerized deployment — hardcode them in the Docker image?</p>
-    <p class="interview-qa__answer"><strong>A.</strong> No — secrets should never be baked into the image or committed to source control. Use a managed secrets service (Azure Key Vault / AWS Secrets Manager) and inject them into the container at runtime via environment variables or a mounted secret store, so the image itself stays portable and safe to share/rebuild without leaking credentials. 51You&#39;ve now covered the full original topic list All ten topics from your interview-prep breakdown are documented above with definitions, deeper mechanics, tradeoff framings, and ready-to-say answers. A few suggestions for how to use this document from here:
-
-&lt;ol&gt;
-  &lt;li&gt;Do a full read-through once, then switch to active recall — cover the “likely questions” sections and try answering from memory before checking.&lt;/li&gt;
-  &lt;li&gt;Rehearse the “one-liner” and “say this if asked” blocks out loud — these are written to be spoken naturally, not read.&lt;/li&gt;
-  &lt;li&gt;Practice connecting topics to each other, the way the preceding section does — interviewers reward candidates who show a coherent system-level mental model, not isolated fact recall.&lt;/li&gt;
-  &lt;li&gt;If you want, I can also put together: a condensed one-page cheat-sheet version of this whole document for last-minute review, a mock Q&amp;A drill where I play interviewer and react to your answers, or dig deeper into any sub-topic (e.g., a closer look at LangGraph&#39;s actual API/syntax, or more RAG evaluation detail) if you want to go beyond what&#39;s here.&lt;/li&gt;
-&lt;/ol&gt;</p>
+    <p class="interview-qa__answer"><strong>A.</strong> No — secrets should never be baked into the image or committed to source control. Use a managed secrets service (Azure Key Vault / AWS Secrets Manager) and inject them into the container at runtime via environment variables or a mounted secret store, so the image itself stays portable and safe to share/rebuild without leaking credentials.</p>
   </div>
 </section>

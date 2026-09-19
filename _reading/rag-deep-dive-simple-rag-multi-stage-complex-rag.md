@@ -23,7 +23,7 @@ Pipeline:
   <li>Generate: LLM produces an answer conditioned on the retrieved context. Say this if asked to define RAG in one line: “RAG grounds an LLM&#39;s output in external, upto-date, or private data by retrieving relevant context at query time and injecting it into the prompt, instead of relying solely on what the model memorized during pretraining — it turns generation into an open-book exam rather than a closed-book one.”</li>
 </ol>
 
-### Why naive RAG breaks in production — the specific failure modes (this is
+### Why naive RAG breaks in production — the specific failure modes (this is what “tradeoff discussion” means)
 
 <div class="table-scroll">
 <table>
@@ -40,29 +40,51 @@ Pipeline:
 </table>
 </div>
 
-what “tradeoff discussion” means) This is the part most candidates skip and just say “RAG is retrieval + generation” — going deeper here is exactly what separates a strong answer: 
+This is the part most candidates skip and just say “RAG is retrieval + generation” — going deeper here is exactly what separates a strong answer:
 
-### Multi-stage / Advanced RAG techniques — the fixes, mapped to the failure
+### Multi-stage / Advanced RAG techniques — the fixes, mapped to the failure modes
 
-modes A. Query transformation (fixes query-document mismatch, no query understanding)
+#### Query transformation (fixes query-document mismatch, no query understanding)
 
 <ul>
   <li>Query rewriting/expansion: use an LLM to rephrase the user&#39;s question into one or more forms more likely to match how the answer is phrased in the corpus, before embedding.</li>
   <li>Multi-query retrieval: generate several paraphrased versions of the query, retrieve for each independently, then merge/de-duplicate results — increases recall by covering more of the semantic neighborhood.</li>
-  <li>HyDE (Hypothetical Document Embeddings): instead of embedding the raw question, ask the LLM to first generate a hypothetical answer to the question, then embed that hypo-</li>
+  <li>HyDE (Hypothetical Document Embeddings): instead of embedding the raw question, ask the LLM to first generate a hypothetical answer to the question, then embed that hypothetical answer and use it for retrieval. Intuition: a hypothetical answer is written in the same “style”/vocabulary as real answers in the corpus, so it retrieves better than the raw question does. This is a great one to name-drop — it signals you've gone past tutorial-level RAG.</li>
 </ul>
 
-thetical answer and use it for retrieval. Intuition: a hypothetical answer is written in the same “style”/vocabulary as real answers in the corpus, so it retrieves better than the raw question does. This is a great one to name-drop — it signals you've gone past tutorial-level RAG.
+<ul>
+  <li>Query decomposition: for multi-hop/compound questions, use an LLM to break the question into sub-questions, retrieve for each separately, then synthesize — directly addresses the multi-hop failure mode.</li>
+</ul>
+
+#### Better chunking/indexing strategies (fixes lost context at boundaries)
 
 <ul>
-  <li>Query decomposition: for multi-hop/compound questions, use an LLM to break the question into sub-questions, retrieve for each separately, then synthesize — directly addresses the multi-hop failure mode. B. Better chunking/indexing strategies (fixes lost context at boundaries)</li>
   <li>Semantic chunking: split on topic/meaning shifts (e.g., via embedding-similarity drop between adjacent sentences) instead of a fixed character/token count.</li>
   <li>Parent-child / small-to-big retrieval: embed and search over small, precise chunks (for retrieval accuracy), but when a small chunk is retrieved, return its larger parent chunk/section to the LLM (for full context) — best of both worlds: precise matching, complete context.</li>
   <li>Sentence-window retrieval: similar idea — retrieve on a single sentence&#39;s embedding, but expand to include a window of surrounding sentences when passing to the LLM.</li>
-  <li>Hierarchical/summary indexing (e.g., RAPTOR-style): build a tree of summaries over the corpus at multiple levels of abstraction, so both fine-grained facts and broad thematic questions can be answered by traversing the right level. C. Hybrid retrieval + re-ranking (fixes irrelevant/noisy retrieval) — covered in depth in the earlier discussion: combine BM25 + dense retrieval, merge via RRF, then apply a cross-encoder re-ranker to the merged candidate set before it ever reaches the LLM. This is usually the single highest-leverage upgrade over naive RAG. D. Adaptive/dynamic retrieval (fixes stale top-k cutoff)</li>
-  <li>Dynamically decide whether to retrieve at all (some queries need no external knowledge — e.g., “hi, how are you”) and how much to retrieve based on query complexity, rather than always running a fixed pipeline. Self-RAG and Corrective RAG (CRAG) are named approaches where the model critiques/evaluates its own retrieved context (e.g., “is this actually relevant/sufficient?”) and can trigger a second retrieval pass, reformulate the query, or fall back to web search if the initial retrieval is judged inadequate. E. Agentic / iterative RAG (fixes multi-hop reasoning, ties into the Agentic AI topic later)</li>
+  <li>Hierarchical/summary indexing (e.g., RAPTOR-style): build a tree of summaries over the corpus at multiple levels of abstraction, so both fine-grained facts and broad thematic questions can be answered by traversing the right level.</li>
+</ul>
+
+#### Hybrid retrieval + re-ranking (fixes irrelevant/noisy retrieval)
+
+<p>Combine BM25 + dense retrieval, merge via RRF, then apply a cross-encoder re-ranker to the merged candidate set before it ever reaches the LLM. This is usually the single highest-leverage upgrade over naive RAG.</p>
+
+#### Adaptive/dynamic retrieval (fixes stale top-k cutoff)
+
+<ul>
+  <li>Dynamically decide whether to retrieve at all (some queries need no external knowledge — e.g., “hi, how are you”) and how much to retrieve based on query complexity, rather than always running a fixed pipeline. Self-RAG and Corrective RAG (CRAG) are named approaches where the model critiques/evaluates its own retrieved context and can trigger a second retrieval pass, reformulate the query, or fall back to web search if the initial retrieval is judged inadequate.</li>
+</ul>
+
+#### Agentic / iterative RAG (fixes multi-hop reasoning)
+
+<ul>
   <li>Instead of one fixed retrieve-then-generate pass, an agent loop: the LLM reasons about what it still needs to know, issues a retrieval (or tool) call, evaluates the result, and decides whether to retrieve again, refine the query, or proceed to answer — repeated iteratively until it has enough information. This is what “agentic RAG” means concretely, and it&#39;s the natural bridge to LangGraph-style orchestration (upcoming topic).</li>
-  <li>GraphRAG: builds a knowledge graph of entities/relationships from the corpus and retrieves via graph traversal in addition to/instead of vector similarity — particularly strong for multihop, relationship-heavy questions vector similarity alone struggles with. F. Post-generation verification (fixes hallucination despite retrieval)</li>
+  <li>GraphRAG: builds a knowledge graph of entities/relationships from the corpus and retrieves via graph traversal in addition to/instead of vector similarity — particularly strong for multi-hop, relationship-heavy questions vector similarity alone struggles with.</li>
+</ul>
+
+#### Post-generation verification (fixes hallucination despite retrieval)
+
+<ul>
   <li>Groundedness/faithfulness checking: after generation, run a check (often another LLM call, or an NLI-style entailment model) verifying that each claim in the answer is actually supported by the retrieved context, before returning it to the user.</li>
 </ul>
 
@@ -70,15 +92,19 @@ thetical answer and use it for retrieval. Intuition: a hypothetical answer is wr
   <li>Citation-forcing: require the model to cite which retrieved chunk supports each statement, which both improves faithfulness (harder to fabricate with a citation requirement) and gives users a way to verify.</li>
 </ul>
 
-### The explicit tradeoff discussion — this is the actual answer to “simple vs. complex
+### The explicit tradeoff discussion — this is the actual answer to “simple vs. complex RAG”
 
-RAG” This is the framing to lead with, since it shows engineering judgment rather than just “more techniques = better”: Dimension Simple RAG Multi-stage/Agentic RAG Latency Low — one retrieval + one generation call Higher — multiple LLM calls (query rewriting, decomposition, re-ranking, self-critique, iterative loops) compound latency, sometimes 3-10x+ Cost Low — minimal token/API usage Higher — every extra LLM-in-the-loop step is more tokens and more API calls Answer quality / accuracy Adequate for simple, well-matched, single-hop questions over clean, well-structured data Meaningfully better for ambiguous queries, multi-hop reasoning, noisy/large corpora, high-stakes accuracy needs Engineering/operational complexity Low — easy to build, debug, and reason about; fewer moving parts to monitor High — more components to monitor, more failure points, harder to debug why a bad answer happened (which stage failed?) Predictability Deterministic-ish, easy to reason about worst-case behavior Iterative/agentic loops can be harder to bound (cost, latency, even correctness) without careful guardrails When it's the right choice Small, clean, well-curated knowledge base; simple factual Q&A; low-stakes internal tools; tight latency/cost budgets Large/messy/heterogeneous corpora; compound or ambiguous user questions; high accuracy bar (compliance, legal, financial); willing to trade cost/latency for correctness The answer I'd actually give in the room: “I wouldn't default to the most complex RAG architecture — I'd start simple and add complexity only where it's justified by a measured failure mode. Naive RAG — chunk, embed, retrieve top-k, generate — works fine when the knowledge base is small, clean, and questions are mostly single-hop factual lookups. Where it breaks down is query-document mismatch, lost context at chunk boundaries, irrelevant retrieval, and multi-hop
+<div class="table-scroll"><table><thead><tr><th>Dimension</th><th>Simple RAG</th><th>Multi-stage/Agentic RAG</th></tr></thead><tbody><tr><td>Latency</td><td>Low — one retrieval + one generation call</td><td>Higher — multiple LLM calls compound latency, sometimes 3–10x+</td></tr><tr><td>Cost</td><td>Low — minimal token/API usage</td><td>Higher — every extra LLM-in-the-loop step is more tokens and more API calls</td></tr><tr><td>Answer quality / accuracy</td><td>Adequate for simple, well-matched, single-hop questions over clean, well-structured data</td><td>Meaningfully better for ambiguous queries, multi-hop reasoning, noisy/large corpora, high-stakes accuracy needs</td></tr><tr><td>Engineering/operational complexity</td><td>Low — easy to build, debug, and reason about</td><td>High — more components to monitor and more failure points</td></tr><tr><td>Predictability</td><td>Deterministic-ish, easy to reason about worst-case behavior</td><td>Iterative/agentic loops can be harder to bound without careful guardrails</td></tr><tr><td>When it’s the right choice</td><td>Small, clean, well-curated knowledge base; simple factual Q&amp;A; tight latency/cost budgets</td><td>Large/messy/heterogeneous corpora; compound or ambiguous questions; high accuracy bar</td></tr></tbody></table></div>
 
-questions — and each of those has a specific fix: query rewriting or HyDE for mismatch, parentchild/semantic chunking for context loss, hybrid retrieval plus re-ranking for irrelevant results, and query decomposition or an agentic retrieval loop for multi-hop reasoning. Each of these adds latency, cost, and operational complexity, so in a client engagement I'd evaluate the specific failure mode against production metrics — I wouldn't reach for agentic RAG or a knowledge graph unless simpler fixes had already been tried and measured as insufficient.”
+The answer I'd actually give in the room: “I wouldn't default to the most complex RAG architecture — I'd start simple and add complexity only where it's justified by a measured failure mode..
 
-### How you'd actually know which failure mode you have — evaluation (interviewers
+Naive RAG — chunk, embed, retrieve top-k, generate — works fine when the knowledge base is small, clean, and questions are mostly single-hop factual lookups..
 
-love when you bring this up unprompted) Naming a framework here signals real production maturity: RAGAS (a common open-source RAG evaluation framework) breaks evaluation into distinct, diagnosable metrics rather than one vague “accuracy” number:
+Where it breaks down is query-document mismatch, lost context at chunk boundaries, irrelevant retrieval, and multi-hop questions — and each of those has a specific fix: query rewriting or HyDE for mismatch, parent-child/semantic chunking for context loss, hybrid retrieval plus re-ranking for irrelevant results, and query decomposition or an agentic retrieval loop for multi-hop reasoning. Each of these adds latency, cost, and operational complexity, so in a client engagement I'd evaluate the specific failure mode against production metrics — I wouldn't reach for agentic RAG or a knowledge graph unless simpler fixes had already been tried and measured as insufficient.”
+
+### How you'd actually know which failure mode you have — evaluation (interviewers love when you bring this up unprompted)
+
+Naming a framework here signals real production maturity: RAGAS (a common open-source RAG evaluation framework) breaks evaluation into distinct, diagnosable metrics rather than one vague “accuracy” number:
 
 <ul>
   <li>Faithfulness: does the generated answer only contain claims supported by the retrieved context? (catches hallucination-despite-retrieval)</li>
