@@ -1,0 +1,35 @@
+---
+layout: default
+---
+<article class="post post--reading h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <p class="eyebrow">Second-brain entry</p>
+    <h1 class="post-title p-name" itemprop="name headline">{{ page.title | escape }}</h1>
+    <div class="post-meta" aria-label="Post metadata">
+      <time class="dt-published visually-hidden" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">{{ page.date | date: "%B %-d, %Y" }}</time>
+      {%- if page.categories and page.categories.size > 0 -%}
+        <span class="post-taxonomy" aria-label="Categories">
+          {%- for category in page.categories -%}<span class="taxonomy-chip">{{ category | escape }}</span>{%- endfor -%}
+        </span>
+      {%- endif -%}
+    </div>
+    {%- if page.tags and page.tags.size > 0 -%}
+      <div class="post-tags" aria-label="Tags">
+        {%- for tag in page.tags -%}<span class="tag-chip">#{{ tag | escape }}</span>{%- endfor -%}
+      </div>
+    {%- endif -%}
+  </header>
+
+  <div class="post-reading-layout">
+    <nav class="post-toc" aria-label="Table of contents" data-post-toc hidden>
+      <p class="post-toc__title">Contents</p>
+      <div data-toc-list></div>
+    </nav>
+
+    <div class="post-content e-content" itemprop="articleBody" data-post-content>
+      {{ content }}
+    </div>
+  </div>
+
+  <a class="u-url" href="{{ page.url | relative_url }}" hidden></a>
+</article>

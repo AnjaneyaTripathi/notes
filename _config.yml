@@ -1,13 +1,24 @@
-title: Notes? Blog? 
+title: Second Brain
 author: Anjaneya Tripathi
-description: Jotting down random things I come across and find interesting (mostly tech)
+description: A personal archive of reading notes, ideas, and AI-assisted explorations.
 theme: minima
+future: true
 
 github_username: AnjaneyaTripathi 
 
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
+
+collections:
+  reading:
+    output: true
+    permalink: /reading/:slug/
+
+feed:
+  collections:
+    - reading
+  posts_limit: 24
 
 markdown: kramdown
 kramdown:

@@ -1,8 +1,8 @@
 ---
 layout: home
-title: A wild Pokemon appeared!
+title: Reading, learning, and rabbit holes
 ---
 
-## Welcome!
+<p class="home__lede">A living collection of reading notes, explanations, ideas, and questions worth following.</p>
 
-This is the homepage of my new blog. Stay tuned for posts!
+<p class="home__byline">By Anjaneya Tripathi: a personal second brain for things I am learning and thinking through, often with help from AI and LLM conversations.</p>

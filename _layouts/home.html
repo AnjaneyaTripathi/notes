@@ -1,0 +1,22 @@
+---
+layout: default
+---
+<div class="home">
+  {%- if page.title -%}
+    <h1 class="page-heading">{{ page.title }}</h1>
+  {%- endif -%}
+
+  {{ content }}
+
+  {%- assign reading_entries = site.reading | sort: "order" | reverse -%}
+  {%- if reading_entries.size > 0 -%}
+    <h2 class="post-list-heading">{{ page.list_title | default: "Posts" }}</h2>
+    <ul class="post-list">
+      {%- for post in reading_entries -%}
+        <li>
+          <a class="post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+</div>

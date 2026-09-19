@@ -1,0 +1,17 @@
+<footer class="site-footer" role="contentinfo">
+  <div class="wrapper footer-shell">
+    <div class="footer-identity h-card">
+      <a class="footer-brand p-name u-url" rel="author" href="{{ "/" | relative_url }}">{{ site.author | escape }}</a>
+      <p class="footer-description">{{ site.description | escape }}</p>
+    </div>
+
+    <nav class="footer-nav" aria-label="Footer navigation">
+      {%- if site.github_username -%}
+        <a href="https://github.com/{{ site.github_username | cgi_escape }}" aria-label="{{ site.github_username | escape }} on GitHub">GitHub</a>
+      {%- endif -%}
+      <a href="{{ "/feed/reading.xml" | relative_url }}" aria-label="Subscribe to the reading archive RSS feed">RSS feed</a>
+    </nav>
+
+    <p class="footer-meta">A personal archive, explored with AI.</p>
+  </div>
+</footer>
